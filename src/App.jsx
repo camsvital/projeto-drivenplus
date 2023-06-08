@@ -1,23 +1,33 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import { useState } from "react";
+import AuthContext from "./context/Context";
+import UserContext from "./context/UserContext";
 
-export default function App() {
-  const [count, setCount] = useState(0)
+/**
+ * Context - 3 coisas:
+ * 1 - criar o context
+ * 2 - criar o provider para passar as informações para os componentes filhos
+ * 3 - nos filhos, tem que ter uma forma de acessar as informações do provider *
+ */
+
+function App() {
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState(undefined);
 
   return (
-    <>
-      <div>
-      </div>
-      <h1>projeto</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          {count}
-        </button>
-        <p>
-          
-        </p>
-      </div>
-      <p className="read-the-docs">
-      </p>
-    </>
-  )
+    <AuthContext.Provider value={{ token, setToken }}>
+      <UserContext.Provider value={{ user, setUser }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/sign-up" element={<SignUp />} />
+          </Routes>
+        </BrowserRouter>
+      </UserContext.Provider>
+    </AuthContext.Provider>
+  );
 }
+
+export default App;
