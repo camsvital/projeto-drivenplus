@@ -3,9 +3,9 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Subscription from "./pages/Subscriptions";
 import Plan from "./pages/Plan";
+import Home from "./pages/Home"
 import { useState } from "react";
 import UserContext from "./context/UserContext";
-import axios from "axios";
 
 export default function App() {
   const tokenLocalStorage = localStorage.getItem("token");
@@ -33,6 +33,7 @@ export default function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/subscriptions" element={<Subscription />} />
           <Route path="/subscriptions/:idPlano" element={<Plan />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

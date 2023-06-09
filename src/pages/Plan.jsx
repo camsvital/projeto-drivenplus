@@ -256,9 +256,6 @@ const Form = styled.form`
     }
   }
 `;
-const img = styled.img`
-
-`
 const OpenModal = styled.div`
   min-height: 100vh;
   width: 100%;
