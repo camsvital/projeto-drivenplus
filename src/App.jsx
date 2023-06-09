@@ -1,33 +1,40 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Subscription from "./pages/Subscriptions";
+import Plan from "./pages/Plan";
 import { useState } from "react";
-import AuthContext from "./context/Context";
 import UserContext from "./context/UserContext";
+import axios from "axios";
 
-/**
- * Context - 3 coisas:
- * 1 - criar o context
- * 2 - criar o provider para passar as informações para os componentes filhos
- * 3 - nos filhos, tem que ter uma forma de acessar as informações do provider *
- */
+export default function App() {
+  const tokenLocalStorage = localStorage.getItem("token");
+  const userLocalStorage = localStorage.getItem("user");
+  const [token, setToken] = useState(tokenLocalStorage);
+  const [user, setUser] = useState(JSON.parse(userLocalStorage));
 
-function App() {
-  const [token, setToken] = useState("");
-  const [user, setUser] = useState(undefined);
+  function saveToken(token) {
+    setToken(token);
+    localStorage.setItem("token", token);
+  }
+
+  function saveUser(user) {
+    setUser(user);
+    localStorage.setItem("user", JSON.stringify(user));
+  }
 
   return (
-    <AuthContext.Provider value={{ token, setToken }}>
-      <UserContext.Provider value={{ user, setUser }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/sign-up" element={<SignUp />} />
-          </Routes>
-        </BrowserRouter>
-      </UserContext.Provider>
-    </AuthContext.Provider>
+    <UserContext.Provider
+      value={{ token, setToken, saveToken, user, setUser, saveUser }}
+    >
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/subscriptions" element={<Subscription />} />
+          <Route path="/subscriptions/:idPlano" element={<Plan />} />
+        </Routes>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 }
-
-export default App;

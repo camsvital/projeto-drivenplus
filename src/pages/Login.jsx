@@ -1,39 +1,41 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import GlobalStyle from "../styles/GlobalStyle";
 import { Link, useNavigate } from "react-router-dom";
-import { ThreeDots } from "react-loader-spinner";
 import styled from "styled-components";
 import axios from "axios";
-import AuthContext from "../context/Context";
 import UserContext from "../context/UserContext";
-import logo from "../assets/logo-home.png";
+import logo from "../assets/logo.png";
 
 export default function Login() {
-  const { setToken } = useContext(AuthContext);
-  const { setUser } = useContext(UserContext);
-
+  const { saveToken } = useContext(UserContext);
+  const { saveUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [disable, setDisable] = useState(false);
+
+  const nav = useNavigate();
 
   function Login(e) {
     e.preventDefault();
-    setDisable(true);
     const loginInfo = {
       email: email,
       password: password,
     };
-    axios
-      .post(
-        `https://mock-api.driven.com.br/api/v4/driven-plus/auth/login`,
-        loginInfo
-      )
-      .then((resp) => {
-        setUser(resp.data);
-        setToken(resp.data.token);
-        navigate("/");
-      })
-      .catch((erro) => alert(erro.response.data.message));
+    const req = axios.post(
+      `https://mock-api.driven.com.br/api/v4/driven-plus/auth/login`,
+      loginInfo
+    );
+    req.then(resposta);
+    req.catch((err) => alert("Usuario não encontrado!"));
+
+    function resposta(resp) {
+      saveToken(resp.data.token);
+      saveUser(resp.data);
+      if (resp.data.membership === null) {
+        nav("/subscriptions");
+      } else {
+        nav("/home");
+      }
+    }
   }
 
   return (
@@ -59,20 +61,7 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <button data-test="" type="submit">
-          {disable ? (
-            <ThreeDots
-              height="80"
-              width="80"
-              radius="9"
-              color="#ffffff"
-              ariaLabel="three-dots-disable"
-              wrapperStyle={{}}
-              wrapperClassName=""
-              visible={true}
-            />
-          ) : (
-            "ENTRAR"
-          )}
+          ENTRAR
         </button>
       </form>
       <Link to={`/sign-up`}>
@@ -83,11 +72,11 @@ export default function Login() {
 }
 
 const Logo = styled.div`
-padding-bottom: 40px;
-  img{
+  padding-bottom: 40px;
+  img {
     width: 300px;
-    }
-`
+  }
+`;
 const PageContainer = styled.div`
   display: flex;
   flex-direction: column;

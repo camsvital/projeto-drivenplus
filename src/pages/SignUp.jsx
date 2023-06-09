@@ -2,19 +2,16 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import { ThreeDots } from "react-loader-spinner";
 
-export default function PaginaCadastro() {
+export default function Cadastro() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [cpf, setCpf] = useState("");
-  const [disable, setDisable] = useState(false);
   const nav = useNavigate();
 
   function SignUp(e) {
     e.preventDefault();
-    setDisable(true);
     const Info = {
       email: email,
       name: name,
@@ -32,7 +29,6 @@ export default function PaginaCadastro() {
       .catch((erro) => {
         console.log(erro);
         alert("Usuario já cadastrado");
-        setDisable(false);
       });
   }
 
@@ -42,24 +38,24 @@ export default function PaginaCadastro() {
         <input
           data-test=""
           placeholder="Nome"
+          required
           type="text"
-          disabled={disable}
           value={name}
           onChange={(e) => setName(e.target.value)}
         ></input>
         <input
           data-test=""
           placeholder="CPF"
+          required
           type="text"
-          disabled={disable}
           value={cpf}
           onChange={(e) => setCpf(e.target.value)}
         ></input>
         <input
           data-test=""
           placeholder="Email"
+          required
           type="email"
-          disabled={disable}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         ></input>
@@ -67,18 +63,18 @@ export default function PaginaCadastro() {
         <input
           data-test=""
           placeholder="Senha"
+          required
           type="password"
-          disabled={disable}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         ></input>
 
-        <button data-test="" type="submit" disabled={disable}>
-          "CADASTRAR"
+        <button data-test="" type="submit">
+          CADASTRAR
         </button>
 
         <Link to={"/"}>
-          <Cadastro data-test="">Já possui uma conta? Entre</Cadastro>
+          <Cadastrar data-test="">Já possui uma conta? Entre</Cadastrar>
         </Link>
       </form>
     </PageContainer>
@@ -99,7 +95,7 @@ const PageContainer = styled.div`
   }
 `;
 
-const Cadastro = styled.p`
+const Cadastrar = styled.p`
   font-family: "Lexend Deca";
   font-style: normal;
   font-weight: 400;
